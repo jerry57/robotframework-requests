@@ -1,9 +1,17 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
-
 from os.path import abspath, dirname, join
-execfile(join(dirname(abspath(__file__)), 'src', 'RequestsLibrary', 'version.py'))
+
+try:
+    from setuptools import setup
+except ImportError as error:
+    from distutils.core import setup
+
+version_file = join(dirname(abspath(__file__)), 'src', 'RequestsLibrary', 'version.py')
+
+with open(version_file) as file:
+      code = compile(file.read(), version_file, 'exec')
+      exec(code)
 
 DESCRIPTION = """
 Robot Framework keyword library wrapper around the HTTP client library requests.
@@ -12,7 +20,7 @@ Robot Framework keyword library wrapper around the HTTP client library requests.
 
 CLASSIFIERS = """
 Development Status :: 5 - Production/Stable
-License :: Public Domain
+License :: OSI Approved :: MIT License
 Operating System :: OS Independent
 Programming Language :: Python
 Topic :: Software Development :: Testing
@@ -25,14 +33,14 @@ setup(name         = 'robotframework-requests',
       author       = 'Bulkan Savun Evcimen',
       author_email = 'bulkan@gmail.com',
       url          = 'http://github.com/bulkan/robotframework-requests',
-      license      = 'Public Domain',
+      license      = 'MIT',
       keywords     = 'robotframework testing test automation http client requests',
       platforms    = 'any',
       classifiers  = CLASSIFIERS.splitlines(),
       package_dir  = {'' : 'src'},
       packages     = ['RequestsLibrary'],
       package_data = {'RequestsLibrary': ['tests/*.txt']},
-      requires=[
+      install_requires=[
           'robotframework',
           'requests'
       ],
